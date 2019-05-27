@@ -1,0 +1,1 @@
+CREATE INDEX stats_values_user_id_index on stats_values(user_id);

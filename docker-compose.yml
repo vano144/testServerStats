@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  flyway:
+    image: boxfuse/flyway:5-alpine
+    volumes:
+      - ./devops/postgres/migrations:/flyway/sql:ro
+    command: -url=jdbc:postgresql://postgres:5432/user_stats -schemas=user_stats -user=user_stats -password=postgres migrate
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "127.0.0.1:5411:5432"
+    volumes:
+      - ./devops/postgres/initdb.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - ./pgdata:/var/lib/postgresql/data
+
+  server-stats-backend:
+    image: server-stats-backend
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: ./devops/Dockerfile
+    environment:
+      - "DATABASE_PORT=5432"
+      - "DATABASE_NAME=user_stats"
+      - "DATABASE_USER=user_stats"
+      - "DATABASE_PASS=postgres"
+      - "DATABASE_HOST=postgres"
+      - "LOG_LEVEL=error"
+      - "SERVER_PORT=:8080"
+    ports:
+      - "127.0.0.1:8080:8080"
