@@ -12,8 +12,9 @@ type UserRepository interface {
 }
 
 type StatRepository interface {
-	createStat(stat *Stat)
+	createStat(stat *Stat) error
 	getAccumulateStats(date1, date2, action string, limit int) (map[string]interface{}, error)
+	getStatsPerDay(date1, date2, action string, limit int) (map[string]interface{}, error)
 }
 
 type UserRepositoryModel struct{
