@@ -14,6 +14,6 @@ func main() {
 	r := server.GetRouter()
 	err := http.ListenAndServe(config.Config.ServerPort, r)
 	if err != nil && err != http.ErrServerClosed {
-		log.WithError(err).Fatal("Failed to establish database connection")
+		log.WithError(err).Fatal("Server failed")
 	}
 }

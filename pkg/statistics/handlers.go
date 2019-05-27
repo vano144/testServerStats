@@ -72,6 +72,7 @@ func GetAccumulateStats(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.WithError(err).Error("GetAccumulateStats problem")
 		errorWriter(err, w, http.StatusInternalServerError)
+		return
 	}
 	w.Header().Set("Content-type", "applciation/json")
 	w.WriteHeader(http.StatusOK)
